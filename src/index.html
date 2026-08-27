@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Overlay Counter</title>
     <style>
-        /* ===== ESTILOS COMPLETOS ===== */
+        /* ===== ESTILOS COMPACTOS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -26,8 +26,8 @@
         .overlay-container {
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px 25px 15px 25px;
+            border-radius: 16px;
+            padding: 10px 20px 10px 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
             position: relative;
             width: 100%;
@@ -36,7 +36,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+            min-height: 170px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             -webkit-app-region: drag;
         }
@@ -44,14 +44,14 @@
         /* Botón cerrar */
         .close-btn {
             position: absolute;
-            top: 5px;
-            right: 8px;
+            top: 4px;
+            right: 6px;
             background: rgba(255, 255, 255, 0.05);
             border: none;
             color: rgba(255, 255, 255, 0.3);
-            font-size: 14px;
-            width: 24px;
-            height: 24px;
+            font-size: 11px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -69,30 +69,30 @@
         /* Contenedor jugadores */
         .container {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             align-items: center;
             justify-content: center;
             width: 100%;
             flex: 1;
-            padding: 5px 0;
+            padding: 2px 0;
         }
 
         .player {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            min-width: 120px;
+            gap: 3px;
+            min-width: 90px;
             flex: 1;
         }
 
         .player-label {
             color: #fff;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bold;
-            letter-spacing: 2px;
-            padding: 4px 16px;
-            border-radius: 8px;
+            letter-spacing: 1px;
+            padding: 2px 10px;
+            border-radius: 5px;
             background: rgba(255, 255, 255, 0.06);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -122,14 +122,14 @@
         .player-name-input {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 8px;
-            padding: 4px 12px;
+            border-radius: 5px;
+            padding: 2px 8px;
             color: white;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bold;
             text-align: center;
             font-family: 'Segoe UI', sans-serif;
-            width: 120px;
+            width: 90px;
             display: none;
             -webkit-app-region: no-drag;
         }
@@ -146,24 +146,26 @@
 
         .life-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: rgba(0, 0, 0, 0.5);
-            padding: 8px 20px;
-            border-radius: 12px;
+            padding: 3px 10px 4px 10px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            min-width: 80px;
-            min-height: 60px;
+            min-width: 60px;
+            min-height: 55px;
+            gap: 1px;
         }
 
         .life-value {
             color: #fff;
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-            line-height: 1.2;
-            min-width: 60px;
+            line-height: 1;
+            min-width: 45px;
             text-align: center;
         }
 
@@ -181,30 +183,79 @@
             50% { opacity: 0.5; }
         }
 
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            width: 100%;
-            align-items: center;
-        }
-
-        .input-group {
+        /* Botones de daño/cura dentro del contenedor de vida */
+        .life-buttons {
             display: flex;
             gap: 5px;
             align-items: center;
         }
 
+        .btn-life {
+            border: none;
+            border-radius: 5px;
+            padding: 1px 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            width: 26px;
+            height: 22px;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-app-region: no-drag;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-life:active {
+            transform: scale(0.9);
+        }
+
+        .btn-damage {
+            background: #ff4444;
+            color: white;
+            box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+        }
+
+        .btn-damage:hover {
+            background: #ff2222;
+            box-shadow: 0 2px 12px rgba(255, 68, 68, 0.5);
+        }
+
+        .btn-heal {
+            background: #44ff88;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(68, 255, 136, 0.3);
+        }
+
+        .btn-heal:hover {
+            background: #22ff77;
+            box-shadow: 0 2px 12px rgba(68, 255, 136, 0.5);
+        }
+
+        /* Input de daño INDIVIDUAL debajo de cada 20 - MÁS PEQUEÑO */
+        .damage-input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1px;
+            width: 100%;
+        }
+
         .damage-input {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            padding: 4px 6px;
+            border-radius: 4px;
+            padding: 1px 6px;
             color: white;
-            font-size: 14px;
-            width: 45px;
+            font-size: 12px;
+            width: 36px;
+            height: 22px;
             text-align: center;
             font-family: 'Courier New', monospace;
+            font-weight: bold;
+            -webkit-app-region: no-drag;
         }
 
         .damage-input:focus {
@@ -221,50 +272,10 @@
             -moz-appearance: textfield;
         }
 
-        .btn {
-            border: none;
-            border-radius: 6px;
-            padding: 4px 12px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            width: 36px;
-            text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-            -webkit-app-region: no-drag;
-        }
-
-        .btn:active {
-            transform: scale(0.9);
-        }
-
-        .btn-damage {
-            background: #ff4444;
-            color: white;
-            box-shadow: 0 2px 12px rgba(255, 68, 68, 0.3);
-        }
-
-        .btn-damage:hover {
-            background: #ff2222;
-            box-shadow: 0 2px 20px rgba(255, 68, 68, 0.5);
-        }
-
-        .btn-heal {
-            background: #44ff88;
-            color: #000;
-            box-shadow: 0 2px 12px rgba(68, 255, 136, 0.3);
-        }
-
-        .btn-heal:hover {
-            background: #22ff77;
-            box-shadow: 0 2px 20px rgba(68, 255, 136, 0.5);
-        }
-
         .bottom-controls {
             display: flex;
-            gap: 10px;
-            margin-top: 6px;
+            gap: 6px;
+            margin-top: 3px;
             -webkit-app-region: no-drag;
         }
 
@@ -272,13 +283,14 @@
             background: rgba(255, 170, 0, 0.15);
             color: #ffaa00;
             border: 1px solid rgba(255, 170, 0, 0.2);
-            padding: 5px 25px;
-            font-size: 14px;
-            border-radius: 8px;
+            padding: 2px 14px;
+            font-size: 11px;
+            border-radius: 5px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: 1px;
+            height: 22px;
         }
 
         .btn-reset:hover {
@@ -293,11 +305,11 @@
 
         .vs-divider {
             color: rgba(255, 255, 255, 0.15);
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            padding: 0 3px;
+            padding: 0 2px;
         }
 
         /* Efectos */
@@ -323,11 +335,15 @@
             display: none;
         }
 
-        @media (max-width: 500px) {
-            .container { gap: 15px; }
-            .life-value { font-size: 36px; min-width: 45px; }
-            .player { min-width: 90px; }
-            .overlay-container { padding: 12px 12px 10px 12px; }
+        @media (max-width: 450px) {
+            .container { gap: 10px; }
+            .life-value { font-size: 28px; }
+            .player { min-width: 70px; }
+            .overlay-container { padding: 8px 10px; }
+            .life-container { min-width: 50px; min-height: 45px; padding: 2px 6px; }
+            .btn-life { width: 22px; height: 18px; font-size: 11px; padding: 1px 5px; }
+            .damage-input { width: 30px; height: 18px; font-size: 10px; }
+            .btn-reset { font-size: 9px; padding: 1px 10px; height: 18px; }
         }
     </style>
 </head>
@@ -345,13 +361,14 @@
                        onblur="saveName(1)" onkeydown="if(event.key==='Enter')saveName(1)">
                 <div class="life-container" id="lifeContainer1">
                     <div class="life-value" id="life1">20</div>
-                </div>
-                <div class="controls">
-                    <div class="input-group">
-                        <input type="number" class="damage-input" id="damageInput1" value="1" min="1" max="999">
-                        <button class="btn btn-damage" data-player="1" data-action="damage">−</button>
-                        <button class="btn btn-heal" data-player="1" data-action="heal">+</button>
+                    <div class="life-buttons">
+                        <button class="btn-life btn-damage" data-player="1" data-action="damage">−</button>
+                        <button class="btn-life btn-heal" data-player="1" data-action="heal">+</button>
                     </div>
+                </div>
+                <!-- Input de daño propio debajo del 20 -->
+                <div class="damage-input-container">
+                    <input type="number" class="damage-input" id="damageInput1" value="1" min="1" max="999">
                 </div>
             </div>
 
@@ -365,18 +382,19 @@
                        onblur="saveName(2)" onkeydown="if(event.key==='Enter')saveName(2)">
                 <div class="life-container" id="lifeContainer2">
                     <div class="life-value" id="life2">20</div>
-                </div>
-                <div class="controls">
-                    <div class="input-group">
-                        <input type="number" class="damage-input" id="damageInput2" value="1" min="1" max="999">
-                        <button class="btn btn-damage" data-player="2" data-action="damage">−</button>
-                        <button class="btn btn-heal" data-player="2" data-action="heal">+</button>
+                    <div class="life-buttons">
+                        <button class="btn-life btn-damage" data-player="2" data-action="damage">−</button>
+                        <button class="btn-life btn-heal" data-player="2" data-action="heal">+</button>
                     </div>
+                </div>
+                <!-- Input de daño propio debajo del 20 -->
+                <div class="damage-input-container">
+                    <input type="number" class="damage-input" id="damageInput2" value="1" min="1" max="999">
                 </div>
             </div>
         </div>
 
-        <!-- Controles inferiores - UN SOLO BOTÓN: RESET -->
+        <!-- Controles inferiores -->
         <div class="bottom-controls">
             <button class="btn-reset" id="resetBtn">🔄 RESET</button>
         </div>
@@ -473,7 +491,7 @@
                 let newLife = life1 + amount;
                 life1 = Math.min(Math.max(newLife, MIN_LIFE), MAX_LIFE);
                 updateDisplay();
-                const container = document.querySelector('.player1 .life-container');
+                const container = document.getElementById('lifeContainer1');
                 container.classList.remove('damage-flash', 'heal-flash');
                 void container.offsetWidth;
                 container.classList.add(amount < 0 ? 'damage-flash' : 'heal-flash');
@@ -481,7 +499,7 @@
                 let newLife = life2 + amount;
                 life2 = Math.min(Math.max(newLife, MIN_LIFE), MAX_LIFE);
                 updateDisplay();
-                const container = document.querySelector('.player2 .life-container');
+                const container = document.getElementById('lifeContainer2');
                 container.classList.remove('damage-flash', 'heal-flash');
                 void container.offsetWidth;
                 container.classList.add(amount < 0 ? 'damage-flash' : 'heal-flash');
@@ -513,13 +531,19 @@
         // 8. EVENTOS: BOTONES
         // ============================================
 
-        // Botones de daño y cura
+        // Botones de daño y cura - CADA UNO USA SU PROPIO INPUT
         document.querySelectorAll('.btn-damage, .btn-heal').forEach(btn => {
             btn.addEventListener('click', () => {
                 const player = parseInt(btn.dataset.player);
                 const action = btn.dataset.action;
-                const input = player === 1 ? damageInput1 : damageInput2;
-                let amount = parseInt(input.value) || 1;
+                
+                // Usar el input correspondiente a cada jugador
+                let amount;
+                if (player === 1) {
+                    amount = parseInt(damageInput1.value) || 1;
+                } else if (player === 2) {
+                    amount = parseInt(damageInput2.value) || 1;
+                }
                 amount = Math.min(Math.max(amount, 1), 999);
 
                 if (action === 'damage') {
@@ -544,36 +568,30 @@
         // 9. TECLAS RÁPIDAS
         // ============================================
         document.addEventListener('keydown', (e) => {
-            // Ctrl+1 = Daño J1
             if (e.ctrlKey && e.key === '1') {
                 e.preventDefault();
                 const amount = parseInt(damageInput1.value) || 1;
                 changeLife(1, -amount);
             }
-            // Ctrl+2 = Daño J2
             if (e.ctrlKey && e.key === '2') {
                 e.preventDefault();
                 const amount = parseInt(damageInput2.value) || 1;
                 changeLife(2, -amount);
             }
-            // Shift+1 = Cura J1
             if (e.shiftKey && e.key === '1') {
                 e.preventDefault();
                 const amount = parseInt(damageInput1.value) || 1;
                 changeLife(1, amount);
             }
-            // Shift+2 = Cura J2
             if (e.shiftKey && e.key === '2') {
                 e.preventDefault();
                 const amount = parseInt(damageInput2.value) || 1;
                 changeLife(2, amount);
             }
-            // R = Reset a 20
             if (e.key === 'r' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
                 e.preventDefault();
                 resetLife(20);
             }
-            // Escape = Cerrar
             if (e.key === 'Escape') {
                 window.close();
             }
