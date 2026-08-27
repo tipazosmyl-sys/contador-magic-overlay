@@ -1,0 +1,24 @@
+
+---
+
+## 🚀 **Cómo subir a GitHub**
+
+### Paso 1: Crear el repositorio en GitHub
+1. Ve a https://github.com/new
+2. Ponle nombre: `contador-magic-overlay`
+3. Marca "Public" o "Private"
+4. Haz clic en "Create repository"
+
+### Paso 2: Subir los archivos
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/contador-magic-overlay.git
+cd contador-magic-overlay
+
+# Copiar todos los archivos que te di en la carpeta
+
+# Subir a GitHub
+git add .
+git commit -m "Primera versión del contador Magic overlay"
+git push origin main

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Overlay Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="overlay-container">
+        <!-- Botón de cerrar (pequeño y discreto) -->
+        <button class="close-btn" id="closeBtn" title="Cerrar">✕</button>
+        
+        <!-- Botón de minimizar -->
+        <button class="min-btn" id="minBtn" title="Minimizar">─</button>
+        
+        <!-- Contenido principal -->
+        <div class="container">
+            <!-- Jugador 1 -->
+            <div class="player player1">
+                <div class="player-label">J1</div>
+                <div class="life-container">
+                    <div class="life-value" id="life1">20</div>
+                </div>
+                <div class="controls">
+                    <div class="input-group">
+                        <input type="number" class="damage-input" id="damageInput1" value="1" min="1" max="999">
+                        <button class="btn btn-damage" data-player="1" data-action="damage">-</button>
+                        <button class="btn btn-heal" data-player="1" data-action="heal">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Separador -->
+            <div class="vs-divider">⚔️</div>
+
+            <!-- Jugador 2 -->
+            <div class="player player2">
+                <div class="player-label">J2</div>
+                <div class="life-container">
+                    <div class="life-value" id="life2">20</div>
+                </div>
+                <div class="controls">
+                    <div class="input-group">
+                        <input type="number" class="damage-input" id="damageInput2" value="1" min="1" max="999">
+                        <button class="btn btn-damage" data-player="2" data-action="damage">-</button>
+                        <button class="btn btn-heal" data-player="2" data-action="heal">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles inferiores -->
+        <div class="bottom-controls">
+            <button class="btn btn-reset" id="resetBtn">🔄 Reset</button>
+            <button class="btn btn-reset" id="reset20Btn">🔁 20</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
