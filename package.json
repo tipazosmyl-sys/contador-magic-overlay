@@ -5,10 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win --x64 --ia32",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux",
-    "build": "electron-builder -mwl"
+    "build:win": "electron-builder --win --x64 --ia32"
   },
   "author": "Tu Nombre",
   "license": "MIT",
@@ -23,26 +20,11 @@
       "output": "dist"
     },
     "win": {
-      "target": ["nsis", "portable"],
+      "target": "portable",
       "icon": "icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
     },
     "portable": {
       "artifactName": "${productName}-portable-${version}.exe"
-    },
-    "mac": {
-      "category": "public.app-category.games",
-      "target": ["dmg", "zip"]
-    },
-    "linux": {
-      "target": ["AppImage", "deb"],
-      "category": "Game"
     }
   }
 }
