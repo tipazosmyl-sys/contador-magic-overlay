@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Overlay Counter</title>
     <style>
-        /* ===== ESTILOS INTEGRADOS ===== */
+        /* ===== ESTILOS COMPLETOS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -91,9 +91,23 @@
             font-size: 16px;
             font-weight: bold;
             letter-spacing: 2px;
-            padding: 2px 12px;
+            padding: 4px 16px;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-app-region: no-drag;
+            border: 1px solid transparent;
+        }
+
+        .player-label:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .player-label:active {
+            transform: scale(0.95);
         }
 
         .player1 .player-label {
@@ -102,6 +116,32 @@
 
         .player2 .player-label {
             color: #4ecdc4;
+        }
+
+        /* Input para cambiar nombre (oculto por defecto) */
+        .player-name-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 4px 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            width: 120px;
+            display: none;
+            -webkit-app-region: no-drag;
+        }
+
+        .player-name-input:focus {
+            outline: none;
+            border-color: rgba(255, 215, 0, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .player-name-input.active {
+            display: block;
         }
 
         .life-container {
@@ -223,7 +263,7 @@
 
         .bottom-controls {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             margin-top: 6px;
             -webkit-app-region: no-drag;
         }
@@ -232,9 +272,9 @@
             background: rgba(255, 170, 0, 0.15);
             color: #ffaa00;
             border: 1px solid rgba(255, 170, 0, 0.2);
-            padding: 4px 16px;
-            font-size: 12px;
-            border-radius: 6px;
+            padding: 5px 20px;
+            font-size: 13px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -244,6 +284,10 @@
             background: rgba(255, 170, 0, 0.25);
             border-color: rgba(255, 170, 0, 0.4);
             transform: scale(1.02);
+        }
+
+        .btn-reset:active {
+            transform: scale(0.95);
         }
 
         .vs-divider {
@@ -295,7 +339,9 @@
         <div class="container">
             <!-- Jugador 1 -->
             <div class="player player1">
-                <div class="player-label">JUGADOR 1</div>
+                <div class="player-label" id="label1" onclick="editName(1)">JUGADOR 1</div>
+                <input type="text" class="player-name-input" id="nameInput1" maxlength="20" 
+                       onblur="saveName(1)" onkeydown="if(event.key==='Enter')saveName(1)">
                 <div class="life-container" id="lifeContainer1">
                     <div class="life-value" id="life1">20</div>
                 </div>
@@ -313,7 +359,9 @@
 
             <!-- Jugador 2 -->
             <div class="player player2">
-                <div class="player-label">JUGADOR 2</div>
+                <div class="player-label" id="label2" onclick="editName(2)">JUGADOR 2</div>
+                <input type="text" class="player-name-input" id="nameInput2" maxlength="20"
+                       onblur="saveName(2)" onkeydown="if(event.key==='Enter')saveName(2)">
                 <div class="life-container" id="lifeContainer2">
                     <div class="life-value" id="life2">20</div>
                 </div>
@@ -335,29 +383,80 @@
     </div>
 
     <script>
-        // ===== SCRIPT INTEGRADO =====
+        // ===== SCRIPT COMPLETO CON MEJORAS =====
         const MAX_LIFE = 999;
         const MIN_LIFE = -999;
 
         let life1 = 20;
         let life2 = 20;
+        let name1 = 'JUGADOR 1';
+        let name2 = 'JUGADOR 2';
 
+        // DOM REFS
         const lifeEl1 = document.getElementById('life1');
         const lifeEl2 = document.getElementById('life2');
+        const label1 = document.getElementById('label1');
+        const label2 = document.getElementById('label2');
+        const nameInput1 = document.getElementById('nameInput1');
+        const nameInput2 = document.getElementById('nameInput2');
         const damageInput1 = document.getElementById('damageInput1');
         const damageInput2 = document.getElementById('damageInput2');
         const resetBtn = document.getElementById('resetBtn');
         const reset20Btn = document.getElementById('reset20Btn');
         const closeBtn = document.getElementById('closeBtn');
 
+        // ===== FUNCIÓN ACTUALIZAR VIDA =====
         function updateDisplay() {
             lifeEl1.textContent = life1;
             lifeEl2.textContent = life2;
 
             lifeEl1.className = 'life-value' + (life1 < 0 ? ' negative' : '') + (life1 <= 5 && life1 > 0 ? ' low-life' : '');
             lifeEl2.className = 'life-value' + (life2 < 0 ? ' negative' : '') + (life2 <= 5 && life2 > 0 ? ' low-life' : '');
+
+            // Guardar en localStorage
+            try {
+                localStorage.setItem('magicOverlay_life1', life1);
+                localStorage.setItem('magicOverlay_life2', life2);
+                localStorage.setItem('magicOverlay_name1', name1);
+                localStorage.setItem('magicOverlay_name2', name2);
+            } catch(e) {}
         }
 
+        // ===== CAMBIAR NOMBRE =====
+        function editName(player) {
+            if (player === 1) {
+                label1.style.display = 'none';
+                nameInput1.style.display = 'block';
+                nameInput1.value = name1;
+                nameInput1.focus();
+                nameInput1.select();
+            } else if (player === 2) {
+                label2.style.display = 'none';
+                nameInput2.style.display = 'block';
+                nameInput2.value = name2;
+                nameInput2.focus();
+                nameInput2.select();
+            }
+        }
+
+        function saveName(player) {
+            if (player === 1) {
+                const newName = nameInput1.value.trim() || 'JUGADOR 1';
+                name1 = newName.toUpperCase();
+                label1.textContent = name1;
+                label1.style.display = 'block';
+                nameInput1.style.display = 'none';
+            } else if (player === 2) {
+                const newName = nameInput2.value.trim() || 'JUGADOR 2';
+                name2 = newName.toUpperCase();
+                label2.textContent = name2;
+                label2.style.display = 'block';
+                nameInput2.style.display = 'none';
+            }
+            updateDisplay();
+        }
+
+        // ===== CAMBIAR VIDA =====
         function changeLife(player, amount) {
             if (player === 1) {
                 let newLife = life1 + amount;
@@ -378,16 +477,48 @@
             }
         }
 
+        // ===== RESET (CORREGIDO) =====
         function resetLife(value = 20) {
+            // Preguntar si está seguro (opcional)
+            if (life1 === value && life2 === value) {
+                // Si ya está en el valor, no hace nada
+                return;
+            }
+            
             life1 = value;
             life2 = value;
             updateDisplay();
+            
+            // Efecto visual de reset
             document.querySelectorAll('.life-container').forEach(el => {
                 el.classList.remove('damage-flash', 'heal-flash');
                 void el.offsetWidth;
                 el.classList.add('heal-flash');
             });
+
+            // Pequeña vibración si está disponible
+            if (navigator.vibrate) navigator.vibrate(30);
         }
+
+        // ===== RESET CON CONFIRMACIÓN =====
+        function resetWithConfirm() {
+            const currentValue = life1; // Tomar la vida actual como referencia
+            const value = prompt(
+                `Ingresa la vida inicial para ambos jugadores:\n(Actual: ${currentValue})`,
+                currentValue.toString()
+            );
+            
+            if (value === null) return; // Cancelar
+            
+            const num = parseInt(value);
+            if (!isNaN(num) && num >= -999 && num <= 999) {
+                resetLife(num);
+            } else {
+                alert('❌ Ingresa un número válido entre -999 y 999');
+            }
+        }
+
+        // ===== EVENTOS =====
 
         // Botones daño/cura
         document.querySelectorAll('.btn-damage, .btn-heal').forEach(btn => {
@@ -406,66 +537,82 @@
             });
         });
 
-        // Teclas rápidas
+        // Reset
+        resetBtn.addEventListener('click', resetWithConfirm);
+        reset20Btn.addEventListener('click', () => resetLife(20));
+
+        // Cerrar
+        closeBtn.addEventListener('click', () => {
+            if (window.electronAPI) {
+                // Si está en Electron
+                const { ipcRenderer } = require('electron');
+                ipcRenderer.send('close-app');
+            } else {
+                window.close();
+            }
+        });
+
+        // ===== TECLAS RÁPIDAS =====
         document.addEventListener('keydown', (e) => {
+            // Ctrl+1 = Daño J1
             if (e.ctrlKey && e.key === '1') {
                 e.preventDefault();
                 const amount = parseInt(damageInput1.value) || 1;
                 changeLife(1, -amount);
             }
+            // Ctrl+2 = Daño J2
             if (e.ctrlKey && e.key === '2') {
                 e.preventDefault();
                 const amount = parseInt(damageInput2.value) || 1;
                 changeLife(2, -amount);
             }
+            // Shift+1 = Cura J1
             if (e.shiftKey && e.key === '1') {
                 e.preventDefault();
                 const amount = parseInt(damageInput1.value) || 1;
                 changeLife(1, amount);
             }
+            // Shift+2 = Cura J2
             if (e.shiftKey && e.key === '2') {
                 e.preventDefault();
                 const amount = parseInt(damageInput2.value) || 1;
                 changeLife(2, amount);
             }
-            if (e.key === 'r' && !e.ctrlKey && !e.shiftKey) {
+            // R = Reset a 20
+            if (e.key === 'r' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
                 e.preventDefault();
                 resetLife(20);
             }
-        });
-
-        // Reset
-        resetBtn.addEventListener('click', () => {
-            const value = prompt('Ingresa la vida inicial:', '20');
-            if (value !== null) {
-                const num = parseInt(value);
-                if (!isNaN(num) && num >= -999 && num <= 999) {
-                    resetLife(num);
-                } else {
-                    alert('Número válido entre -999 y 999');
-                }
+            // Escape para cerrar (opcional)
+            if (e.key === 'Escape') {
+                window.close();
             }
         });
 
-        reset20Btn.addEventListener('click', () => {
-            resetLife(20);
-        });
-
-        // Cerrar
-        closeBtn.addEventListener('click', () => {
-            window.close();
-        });
-
-        // Cargar datos guardados
+        // ===== CARGA INICIAL =====
         try {
             const savedLife1 = localStorage.getItem('magicOverlay_life1');
             const savedLife2 = localStorage.getItem('magicOverlay_life2');
+            const savedName1 = localStorage.getItem('magicOverlay_name1');
+            const savedName2 = localStorage.getItem('magicOverlay_name2');
+            
             if (savedLife1 !== null) life1 = parseInt(savedLife1) || 20;
             if (savedLife2 !== null) life2 = parseInt(savedLife2) || 20;
+            if (savedName1) {
+                name1 = savedName1;
+                label1.textContent = name1;
+            }
+            if (savedName2) {
+                name2 = savedName2;
+                label2.textContent = name2;
+            }
         } catch(e) {}
 
         updateDisplay();
         console.log('🎯 Magic Overlay Counter cargado!');
+        console.log('📖 Atajos: Ctrl+1 (daño J1), Ctrl+2 (daño J2)');
+        console.log('📖 Shift+1 (cura J1), Shift+2 (cura J2), R (reset a 20)');
+        console.log('📖 Click en nombre para cambiarlo');
     </script>
 </body>
 </html>
