@@ -267,7 +267,7 @@
             -moz-appearance: textfield;
         }
 
-        /* ===== MARCADOR CENTRAL MÁS PEQUEÑO ===== */
+        /* ===== MARCADOR EDITABLE ===== */
         .score-section {
             display: flex;
             align-items: center;
@@ -286,6 +286,13 @@
             background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .score-display:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .score-number {
@@ -295,6 +302,8 @@
             min-width: 18px;
             text-align: center;
             transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 0 2px;
         }
 
         .score-number.p1 {
@@ -305,6 +314,11 @@
             color: #4ecdc4;
         }
 
+        .score-number:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
         .score-dash {
             color: rgba(255, 255, 255, 0.2);
             font-size: 16px;
@@ -313,47 +327,35 @@
             padding: 0 2px;
         }
 
-        .score-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: rgba(255, 255, 255, 0.25);
+        /* Inputs ocultos para editar el marcador */
+        .score-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
             border-radius: 4px;
-            padding: 0 8px;
-            font-size: 11px;
-            height: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            -webkit-app-region: no-drag;
+            padding: 0 4px;
+            color: white;
+            font-size: 18px;
             font-weight: bold;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            width: 28px;
+            height: 26px;
+            display: none;
+            -webkit-app-region: no-drag;
         }
 
-        .score-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.6);
+        .score-input:focus {
+            outline: none;
+            border-color: rgba(255, 215, 0, 0.6);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .score-btn-p1:hover {
-            background: rgba(255, 107, 107, 0.15);
-            color: #ff6b6b;
-            border-color: rgba(255, 107, 107, 0.2);
+        .score-input.active {
+            display: inline-block;
         }
 
-        .score-btn-p2:hover {
-            background: rgba(78, 205, 196, 0.15);
-            color: #4ecdc4;
-            border-color: rgba(78, 205, 196, 0.2);
-        }
-
-        .score-btn-reset {
-            font-size: 9px;
-            padding: 0 6px;
-            color: rgba(255, 255, 255, 0.15);
-        }
-
-        .score-btn-reset:hover {
-            background: rgba(255, 68, 68, 0.15);
-            color: #ff4444;
-            border-color: rgba(255, 68, 68, 0.2);
+        .score-number.hidden {
+            display: none;
         }
 
         /* ===== BOTÓN RESET (SOLO PARA VIDA) ===== */
@@ -441,7 +443,7 @@
             .btn-reset { font-size: 10px; padding: 2px 14px; height: 20px; }
             .score-number { font-size: 15px; min-width: 14px; }
             .score-display { padding: 1px 10px; }
-            .score-btn { font-size: 9px; height: 16px; padding: 0 5px; }
+            .score-input { font-size: 15px; width: 22px; height: 22px; }
         }
     </style>
 </head>
@@ -490,16 +492,15 @@
             </div>
         </div>
 
-        <!-- ===== MARCADOR CENTRAL (MÁS PEQUEÑO) ===== -->
+        <!-- ===== MARCADOR EDITABLE ===== -->
         <div class="score-section">
-            <div class="score-display">
-                <span class="score-number p1" id="score1Display">0</span>
+            <div class="score-display" id="scoreDisplay">
+                <span class="score-number p1" id="score1Label">0</span>
+                <input type="number" class="score-input" id="score1Input" min="0" max="999" value="0">
                 <span class="score-dash">-</span>
-                <span class="score-number p2" id="score2Display">0</span>
+                <span class="score-number p2" id="score2Label">0</span>
+                <input type="number" class="score-input" id="score2Input" min="0" max="999" value="0">
             </div>
-            <button class="score-btn score-btn-p1" id="scoreP1Btn" title="Sumar punto J1">+P1</button>
-            <button class="score-btn score-btn-p2" id="scoreP2Btn" title="Sumar punto J2">+P2</button>
-            <button class="score-btn score-btn-reset" id="resetScoreBtn" title="Reiniciar marcador">✕</button>
         </div>
 
         <!-- ===== BOTÓN RESET (SOLO PARA VIDA) ===== -->
@@ -538,11 +539,10 @@
         const damageInput2 = document.getElementById('damageInput2');
         const resetBtn = document.getElementById('resetBtn');
         const closeBtn = document.getElementById('closeBtn');
-        const score1Display = document.getElementById('score1Display');
-        const score2Display = document.getElementById('score2Display');
-        const scoreP1Btn = document.getElementById('scoreP1Btn');
-        const scoreP2Btn = document.getElementById('scoreP2Btn');
-        const resetScoreBtn = document.getElementById('resetScoreBtn');
+        const score1Label = document.getElementById('score1Label');
+        const score2Label = document.getElementById('score2Label');
+        const score1Input = document.getElementById('score1Input');
+        const score2Input = document.getElementById('score2Input');
 
         // ============================================
         // 4. FUNCIÓN: ACTUALIZAR PANTALLA
@@ -555,8 +555,10 @@
             lifeEl2.className = 'life-value' + (life2 < 0 ? ' negative' : '') + (life2 <= 5 && life2 > 0 ? ' low-life' : '');
 
             // Actualizar marcador
-            score1Display.textContent = score1;
-            score2Display.textContent = score2;
+            score1Label.textContent = score1;
+            score2Label.textContent = score2;
+            score1Input.value = score1;
+            score2Input.value = score2;
 
             try {
                 localStorage.setItem('magicOverlay_life1', life1);
@@ -628,28 +630,53 @@
         }
 
         // ============================================
-        // 7. MARCADOR GLOBAL
+        // 7. MARCADOR EDITABLE
         // ============================================
-        function addScore(player) {
+        function editScore(player) {
             if (player === 1) {
-                score1++;
+                score1Label.classList.add('hidden');
+                score1Input.classList.add('active');
+                score1Input.focus();
+                score1Input.select();
             } else if (player === 2) {
-                score2++;
+                score2Label.classList.add('hidden');
+                score2Input.classList.add('active');
+                score2Input.focus();
+                score2Input.select();
             }
-            updateDisplay();
-            const scoreDisplay = document.querySelector('.score-display');
-            scoreDisplay.classList.remove('score-pop');
-            void scoreDisplay.offsetWidth;
-            scoreDisplay.classList.add('score-pop');
-            if (navigator.vibrate) navigator.vibrate(20);
         }
 
-        function resetScore() {
-            if (score1 === 0 && score2 === 0) return;
-            score1 = 0;
-            score2 = 0;
-            updateDisplay();
-            if (navigator.vibrate) navigator.vibrate(30);
+        function saveScore(player) {
+            if (player === 1) {
+                const value = parseInt(score1Input.value);
+                if (!isNaN(value) && value >= 0 && value <= 999) {
+                    score1 = value;
+                } else {
+                    score1Input.value = score1;
+                }
+                score1Label.classList.remove('hidden');
+                score1Input.classList.remove('active');
+                updateDisplay();
+                // Efecto visual
+                const scoreDisplay = document.querySelector('.score-display');
+                scoreDisplay.classList.remove('score-pop');
+                void scoreDisplay.offsetWidth;
+                scoreDisplay.classList.add('score-pop');
+            } else if (player === 2) {
+                const value = parseInt(score2Input.value);
+                if (!isNaN(value) && value >= 0 && value <= 999) {
+                    score2 = value;
+                } else {
+                    score2Input.value = score2;
+                }
+                score2Label.classList.remove('hidden');
+                score2Input.classList.remove('active');
+                updateDisplay();
+                const scoreDisplay = document.querySelector('.score-display');
+                scoreDisplay.classList.remove('score-pop');
+                void scoreDisplay.offsetWidth;
+                scoreDisplay.classList.add('score-pop');
+            }
         }
 
         // ============================================
@@ -695,10 +722,26 @@
             });
         });
 
-        // Marcador
-        scoreP1Btn.addEventListener('click', () => addScore(1));
-        scoreP2Btn.addEventListener('click', () => addScore(2));
-        resetScoreBtn.addEventListener('click', resetScore);
+        // Editar marcador - click en los números
+        score1Label.addEventListener('click', () => editScore(1));
+        score2Label.addEventListener('click', () => editScore(2));
+
+        // Guardar marcador al perder foco o presionar Enter
+        score1Input.addEventListener('blur', () => saveScore(1));
+        score1Input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveScore(1);
+            }
+        });
+
+        score2Input.addEventListener('blur', () => saveScore(2));
+        score2Input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveScore(2);
+            }
+        });
 
         // Reset (SOLO VIDA)
         resetBtn.addEventListener('click', () => resetLife(20));
@@ -770,6 +813,7 @@
         console.log('🎯 Magic Overlay Counter cargado!');
         console.log('📖 Atajos: Ctrl+1 (daño J1), Ctrl+2 (daño J2)');
         console.log('📖 Shift+1 (cura J1), Shift+2 (cura J2), R (reset vida a 20)');
+        console.log('📖 Click en los números del marcador para editarlos');
         console.log('📖 Click en nombre para cambiarlo');
     </script>
 </body>
