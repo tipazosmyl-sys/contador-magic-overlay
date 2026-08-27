@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Overlay Counter</title>
     <style>
-        /* ===== ESTILOS ===== */
+        /* ===== ESTILOS UNIFORMES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
         }
 
         .overlay-container {
-            background: rgba(0, 0, 0, 0.50);  /* ← 50% TRANSPARENTE */
+            background: rgba(0, 0, 0, 0.50);
             backdrop-filter: blur(8px);
             border-radius: 16px;
             padding: 12px 20px 12px 20px;
@@ -36,7 +36,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 210px;
+            min-height: 230px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             -webkit-app-region: drag;
         }
@@ -67,7 +67,7 @@
 
         .container {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             align-items: center;
             justify-content: center;
             width: 100%;
@@ -79,29 +79,32 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             min-width: 110px;
             flex: 1;
         }
 
+        /* ===== TODOS LOS CUADROS CON EL MISMO FONDO ===== */
         .player-label {
             color: #fff;
             font-size: 14px;
             font-weight: bold;
             letter-spacing: 1.5px;
-            padding: 3px 14px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.06);
+            padding: 4px 16px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);  /* ← MISMO FONDO */
+            border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
             transition: all 0.2s ease;
             -webkit-app-region: no-drag;
-            border: 1px solid transparent;
+            width: 100%;
+            text-align: center;
         }
 
         .player-label:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
         }
 
         .player-label:active {
@@ -117,16 +120,16 @@
         }
 
         .player-name-input {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
             border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 6px;
-            padding: 2px 10px;
+            border-radius: 8px;
+            padding: 4px 10px;
             color: white;
             font-size: 14px;
             font-weight: bold;
             text-align: center;
             font-family: 'Segoe UI', sans-serif;
-            width: 110px;
+            width: 100%;
             display: none;
             -webkit-app-region: no-drag;
         }
@@ -134,7 +137,7 @@
         .player-name-input:focus {
             outline: none;
             border-color: rgba(255, 215, 0, 0.6);
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .player-name-input.active {
@@ -146,13 +149,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.5);  /* ← SE MANTIENE */
+            background: rgba(0, 0, 0, 0.5);
             padding: 6px 16px 8px 16px;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             min-width: 80px;
             min-height: 70px;
             gap: 3px;
+            width: 100%;
         }
 
         .life-value {
@@ -230,23 +234,23 @@
             box-shadow: 0 2px 15px rgba(68, 255, 136, 0.5);
         }
 
+        /* ===== INPUTS "1" CON EL MISMO FONDO ===== */
         .damage-input-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 2px;
             width: 100%;
         }
 
         .damage-input {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.5);  /* ← MISMO FONDO */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            padding: 2px 8px;
+            border-radius: 8px;
+            padding: 4px 8px;
             color: white;
-            font-size: 14px;
-            width: 42px;
-            height: 24px;
+            font-size: 16px;
+            width: 50px;
+            height: 30px;
             text-align: center;
             font-family: 'Courier New', monospace;
             font-weight: bold;
@@ -256,7 +260,7 @@
         .damage-input:focus {
             outline: none;
             border-color: rgba(255, 215, 0, 0.3);
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .damage-input::-webkit-inner-spin-button {
@@ -267,13 +271,13 @@
             -moz-appearance: textfield;
         }
 
-        /* ===== MARCADOR EDITABLE ===== */
+        /* ===== MARCADOR CON EL MISMO FONDO ===== */
         .score-section {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin: 2px 0;
+            gap: 10px;
+            margin: 4px 0;
             -webkit-app-region: no-drag;
             width: 100%;
         }
@@ -281,25 +285,25 @@
         .score-display {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 2px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            gap: 6px;
+            padding: 4px 20px;
+            background: rgba(0, 0, 0, 0.5);  /* ← MISMO FONDO */
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .score-display:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .score-number {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
-            min-width: 18px;
+            min-width: 22px;
             text-align: center;
             transition: all 0.2s ease;
             cursor: pointer;
@@ -321,24 +325,24 @@
 
         .score-dash {
             color: rgba(255, 255, 255, 0.2);
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             padding: 0 2px;
         }
 
         .score-input {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
             border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 4px;
+            border-radius: 6px;
             padding: 0 4px;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             text-align: center;
             font-family: 'Courier New', monospace;
-            width: 28px;
-            height: 26px;
+            width: 32px;
+            height: 30px;
             display: none;
             -webkit-app-region: no-drag;
         }
@@ -346,7 +350,7 @@
         .score-input:focus {
             outline: none;
             border-color: rgba(255, 215, 0, 0.6);
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .score-input.active {
@@ -360,7 +364,7 @@
         .bottom-controls {
             display: flex;
             gap: 10px;
-            margin-top: 2px;
+            margin-top: 4px;
             -webkit-app-region: no-drag;
         }
 
@@ -368,14 +372,14 @@
             background: rgba(255, 170, 0, 0.15);
             color: #ffaa00;
             border: 1px solid rgba(255, 170, 0, 0.2);
-            padding: 3px 18px;
+            padding: 4px 22px;
             font-size: 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: 1px;
-            height: 24px;
+            height: 28px;
         }
 
         .btn-reset:hover {
@@ -429,18 +433,18 @@
         }
 
         @media (max-width: 450px) {
-            .container { gap: 15px; }
+            .container { gap: 12px; }
             .life-value { font-size: 34px; }
-            .player { min-width: 90px; }
-            .overlay-container { padding: 10px 14px; min-height: 200px; }
-            .life-container { min-width: 65px; min-height: 60px; padding: 4px 10px; }
+            .player { min-width: 80px; }
+            .overlay-container { padding: 10px 12px; min-height: 200px; }
+            .life-container { min-width: 60px; min-height: 60px; padding: 4px 10px; }
             .btn-life { width: 28px; height: 22px; font-size: 13px; }
-            .damage-input { width: 36px; height: 20px; font-size: 12px; }
-            .player-label { font-size: 12px; }
-            .btn-reset { font-size: 10px; padding: 2px 14px; height: 20px; }
-            .score-number { font-size: 15px; min-width: 14px; }
-            .score-display { padding: 1px 10px; }
-            .score-input { font-size: 15px; width: 22px; height: 22px; }
+            .damage-input { width: 40px; height: 26px; font-size: 14px; }
+            .player-label { font-size: 12px; padding: 3px 12px; }
+            .btn-reset { font-size: 10px; padding: 2px 16px; height: 24px; }
+            .score-number { font-size: 16px; min-width: 16px; }
+            .score-display { padding: 2px 12px; }
+            .score-input { font-size: 16px; width: 26px; height: 26px; }
         }
     </style>
 </head>
@@ -449,6 +453,7 @@
         <button class="close-btn" id="closeBtn" title="Cerrar">✕</button>
 
         <div class="container">
+            <!-- Jugador 1 -->
             <div class="player player1">
                 <div class="player-label" id="label1" onclick="editName(1)">JUGADOR 1</div>
                 <input type="text" class="player-name-input" id="nameInput1" maxlength="20" 
@@ -467,6 +472,7 @@
 
             <div class="vs-divider">⚔️</div>
 
+            <!-- Jugador 2 -->
             <div class="player player2">
                 <div class="player-label" id="label2" onclick="editName(2)">JUGADOR 2</div>
                 <input type="text" class="player-name-input" id="nameInput2" maxlength="20"
@@ -484,6 +490,7 @@
             </div>
         </div>
 
+        <!-- Marcador -->
         <div class="score-section">
             <div class="score-display" id="scoreDisplay">
                 <span class="score-number p1" id="score1Label">0</span>
@@ -494,6 +501,7 @@
             </div>
         </div>
 
+        <!-- Reset -->
         <div class="bottom-controls">
             <button class="btn-reset" id="resetBtn">🔄 RESET</button>
         </div>
