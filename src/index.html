@@ -24,7 +24,7 @@
         }
 
         .overlay-container {
-            background: rgba(0, 0, 0, 0.70);
+            background: rgba(0, 0, 0, 0.50);  /* ← 50% TRANSPARENTE */
             backdrop-filter: blur(8px);
             border-radius: 16px;
             padding: 12px 20px 12px 20px;
@@ -146,7 +146,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);  /* ← SE MANTIENE */
             padding: 6px 16px 8px 16px;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -327,7 +327,6 @@
             padding: 0 2px;
         }
 
-        /* Inputs ocultos para editar el marcador */
         .score-input {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 215, 0, 0.3);
@@ -358,7 +357,6 @@
             display: none;
         }
 
-        /* ===== BOTÓN RESET (SOLO PARA VIDA) ===== */
         .bottom-controls {
             display: flex;
             gap: 10px;
@@ -399,7 +397,6 @@
             padding: 0 3px;
         }
 
-        /* Efectos */
         .damage-flash {
             animation: flashRed 0.3s ease;
         }
@@ -449,12 +446,9 @@
 </head>
 <body>
     <div class="overlay-container">
-        <!-- Botón de cerrar -->
         <button class="close-btn" id="closeBtn" title="Cerrar">✕</button>
 
-        <!-- Contenido principal -->
         <div class="container">
-            <!-- Jugador 1 -->
             <div class="player player1">
                 <div class="player-label" id="label1" onclick="editName(1)">JUGADOR 1</div>
                 <input type="text" class="player-name-input" id="nameInput1" maxlength="20" 
@@ -471,10 +465,8 @@
                 </div>
             </div>
 
-            <!-- Separador -->
             <div class="vs-divider">⚔️</div>
 
-            <!-- Jugador 2 -->
             <div class="player player2">
                 <div class="player-label" id="label2" onclick="editName(2)">JUGADOR 2</div>
                 <input type="text" class="player-name-input" id="nameInput2" maxlength="20"
@@ -492,7 +484,6 @@
             </div>
         </div>
 
-        <!-- ===== MARCADOR EDITABLE ===== -->
         <div class="score-section">
             <div class="score-display" id="scoreDisplay">
                 <span class="score-number p1" id="score1Label">0</span>
@@ -503,7 +494,6 @@
             </div>
         </div>
 
-        <!-- ===== BOTÓN RESET (SOLO PARA VIDA) ===== -->
         <div class="bottom-controls">
             <button class="btn-reset" id="resetBtn">🔄 RESET</button>
         </div>
@@ -554,7 +544,6 @@
             lifeEl1.className = 'life-value' + (life1 < 0 ? ' negative' : '') + (life1 <= 5 && life1 > 0 ? ' low-life' : '');
             lifeEl2.className = 'life-value' + (life2 < 0 ? ' negative' : '') + (life2 <= 5 && life2 > 0 ? ' low-life' : '');
 
-            // Actualizar marcador
             score1Label.textContent = score1;
             score2Label.textContent = score2;
             score1Input.value = score1;
@@ -657,7 +646,6 @@
                 score1Label.classList.remove('hidden');
                 score1Input.classList.remove('active');
                 updateDisplay();
-                // Efecto visual
                 const scoreDisplay = document.querySelector('.score-display');
                 scoreDisplay.classList.remove('score-pop');
                 void scoreDisplay.offsetWidth;
@@ -701,7 +689,6 @@
         // 9. EVENTOS
         // ============================================
 
-        // Botones daño/cura
         document.querySelectorAll('.btn-damage, .btn-heal').forEach(btn => {
             btn.addEventListener('click', () => {
                 const player = parseInt(btn.dataset.player);
@@ -722,11 +709,9 @@
             });
         });
 
-        // Editar marcador - click en los números
         score1Label.addEventListener('click', () => editScore(1));
         score2Label.addEventListener('click', () => editScore(2));
 
-        // Guardar marcador al perder foco o presionar Enter
         score1Input.addEventListener('blur', () => saveScore(1));
         score1Input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -743,10 +728,8 @@
             }
         });
 
-        // Reset (SOLO VIDA)
         resetBtn.addEventListener('click', () => resetLife(20));
 
-        // Cerrar
         closeBtn.addEventListener('click', () => {
             window.close();
         });
