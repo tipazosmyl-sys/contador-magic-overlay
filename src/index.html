@@ -272,18 +272,19 @@
             background: rgba(255, 170, 0, 0.15);
             color: #ffaa00;
             border: 1px solid rgba(255, 170, 0, 0.2);
-            padding: 5px 20px;
-            font-size: 13px;
+            padding: 5px 25px;
+            font-size: 14px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            letter-spacing: 1px;
         }
 
         .btn-reset:hover {
             background: rgba(255, 170, 0, 0.25);
             border-color: rgba(255, 170, 0, 0.4);
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
 
         .btn-reset:active {
@@ -375,24 +376,30 @@
             </div>
         </div>
 
-        <!-- Controles inferiores -->
-        <!-- Controles inferiores -->
-<div class="bottom-controls">
-    <button class="btn-reset" id="resetBtn">🔄 RESET</button>
-</div>
+        <!-- Controles inferiores - UN SOLO BOTÓN: RESET -->
+        <div class="bottom-controls">
+            <button class="btn-reset" id="resetBtn">🔄 RESET</button>
+        </div>
     </div>
 
     <script>
-        // ===== SCRIPT COMPLETO CON MEJORAS =====
+        // ============================================
+        // 1. CONFIGURACIÓN
+        // ============================================
         const MAX_LIFE = 999;
         const MIN_LIFE = -999;
 
+        // ============================================
+        // 2. ESTADO DEL JUEGO
+        // ============================================
         let life1 = 20;
         let life2 = 20;
         let name1 = 'JUGADOR 1';
         let name2 = 'JUGADOR 2';
 
-        // DOM REFS
+        // ============================================
+        // 3. REFERENCIAS A ELEMENTOS HTML
+        // ============================================
         const lifeEl1 = document.getElementById('life1');
         const lifeEl2 = document.getElementById('life2');
         const label1 = document.getElementById('label1');
@@ -402,10 +409,11 @@
         const damageInput1 = document.getElementById('damageInput1');
         const damageInput2 = document.getElementById('damageInput2');
         const resetBtn = document.getElementById('resetBtn');
-        const reset20Btn = document.getElementById('reset20Btn');
         const closeBtn = document.getElementById('closeBtn');
 
-        // ===== FUNCIÓN ACTUALIZAR VIDA =====
+        // ============================================
+        // 4. FUNCIÓN: ACTUALIZAR PANTALLA
+        // ============================================
         function updateDisplay() {
             lifeEl1.textContent = life1;
             lifeEl2.textContent = life2;
@@ -413,7 +421,6 @@
             lifeEl1.className = 'life-value' + (life1 < 0 ? ' negative' : '') + (life1 <= 5 && life1 > 0 ? ' low-life' : '');
             lifeEl2.className = 'life-value' + (life2 < 0 ? ' negative' : '') + (life2 <= 5 && life2 > 0 ? ' low-life' : '');
 
-            // Guardar en localStorage
             try {
                 localStorage.setItem('magicOverlay_life1', life1);
                 localStorage.setItem('magicOverlay_life2', life2);
@@ -422,7 +429,9 @@
             } catch(e) {}
         }
 
-        // ===== CAMBIAR NOMBRE =====
+        // ============================================
+        // 5. FUNCIÓN: CAMBIAR NOMBRE
+        // ============================================
         function editName(player) {
             if (player === 1) {
                 label1.style.display = 'none';
@@ -456,7 +465,9 @@
             updateDisplay();
         }
 
-        // ===== CAMBIAR VIDA =====
+        // ============================================
+        // 6. FUNCIÓN: CAMBIAR VIDA
+        // ============================================
         function changeLife(player, amount) {
             if (player === 1) {
                 let newLife = life1 + amount;
@@ -477,11 +488,11 @@
             }
         }
 
-        // ===== RESET (CORREGIDO) =====
+        // ============================================
+        // 7. FUNCIÓN: RESET
+        // ============================================
         function resetLife(value = 20) {
-            // Preguntar si está seguro (opcional)
             if (life1 === value && life2 === value) {
-                // Si ya está en el valor, no hace nada
                 return;
             }
             
@@ -489,38 +500,20 @@
             life2 = value;
             updateDisplay();
             
-            // Efecto visual de reset
             document.querySelectorAll('.life-container').forEach(el => {
                 el.classList.remove('damage-flash', 'heal-flash');
                 void el.offsetWidth;
                 el.classList.add('heal-flash');
             });
 
-            // Pequeña vibración si está disponible
             if (navigator.vibrate) navigator.vibrate(30);
         }
 
-        // ===== RESET CON CONFIRMACIÓN =====
-        function resetWithConfirm() {
-            const currentValue = life1; // Tomar la vida actual como referencia
-            const value = prompt(
-                `Ingresa la vida inicial para ambos jugadores:\n(Actual: ${currentValue})`,
-                currentValue.toString()
-            );
-            
-            if (value === null) return; // Cancelar
-            
-            const num = parseInt(value);
-            if (!isNaN(num) && num >= -999 && num <= 999) {
-                resetLife(num);
-            } else {
-                alert('❌ Ingresa un número válido entre -999 y 999');
-            }
-        }
+        // ============================================
+        // 8. EVENTOS: BOTONES
+        // ============================================
 
-        // ===== EVENTOS =====
-
-        // Botones daño/cura
+        // Botones de daño y cura
         document.querySelectorAll('.btn-damage, .btn-heal').forEach(btn => {
             btn.addEventListener('click', () => {
                 const player = parseInt(btn.dataset.player);
@@ -537,22 +530,19 @@
             });
         });
 
-        // Reset
-        resetBtn.addEventListener('click', resetWithConfirm);
-        reset20Btn.addEventListener('click', () => resetLife(20));
-
-        // Cerrar
-        closeBtn.addEventListener('click', () => {
-            if (window.electronAPI) {
-                // Si está en Electron
-                const { ipcRenderer } = require('electron');
-                ipcRenderer.send('close-app');
-            } else {
-                window.close();
-            }
+        // Botón RESET
+        resetBtn.addEventListener('click', () => {
+            resetLife(20);
         });
 
-        // ===== TECLAS RÁPIDAS =====
+        // Botón cerrar
+        closeBtn.addEventListener('click', () => {
+            window.close();
+        });
+
+        // ============================================
+        // 9. TECLAS RÁPIDAS
+        // ============================================
         document.addEventListener('keydown', (e) => {
             // Ctrl+1 = Daño J1
             if (e.ctrlKey && e.key === '1') {
@@ -583,13 +573,15 @@
                 e.preventDefault();
                 resetLife(20);
             }
-            // Escape para cerrar (opcional)
+            // Escape = Cerrar
             if (e.key === 'Escape') {
                 window.close();
             }
         });
 
-        // ===== CARGA INICIAL =====
+        // ============================================
+        // 10. CARGA INICIAL
+        // ============================================
         try {
             const savedLife1 = localStorage.getItem('magicOverlay_life1');
             const savedLife2 = localStorage.getItem('magicOverlay_life2');
