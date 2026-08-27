@@ -7,12 +7,11 @@ function createWindow() {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
     mainWindow = new BrowserWindow({
-        width: 400,
-        height: 250,
+        width: 450,
+        height: 280,
         transparent: true,
         frame: false,
         alwaysOnTop: true,
-        skipTaskbar: false,
         resizable: true,
         minWidth: 300,
         minHeight: 200,
@@ -23,15 +22,21 @@ function createWindow() {
         }
     });
 
-    mainWindow.loadFile('index.html');
+    // ✅ RUTA CORREGIDA - Carga el HTML
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    
     mainWindow.setAlwaysOnTop(true, 'pop-up-menu');
     mainWindow.setVisibleOnAllWorkspaces(true);
     mainWindow.setMenuBarVisibility(false);
 
+    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
     mainWindow.setPosition(
-        (width - 400) / 2,
-        (height - 250) / 2
+        (screenWidth - 450) / 2,
+        (screenHeight - 280) / 2
     );
+
+    // 🔍 Para depurar (comentar después)
+    // mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
